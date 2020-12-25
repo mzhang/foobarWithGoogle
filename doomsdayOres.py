@@ -24,10 +24,20 @@ def solution(m):
         if all([v==0 for v in m[r]]):
             m[r][r]=1
             qSize-=1
+    
+    for r in range(size):
+        a = 0
+        for v in range(size):
+            a+=m[r][v]
+        for v in range(size):
+            m[r][v] /= a
+
+    print(m)
+            
 
     q=[m[i][:qSize] for i in range(qSize)]
     iq=matrixSubtract(identity(qSize),q)
-
+    
     f=identity(qSize)
 
     for i in range(qSize):
@@ -50,13 +60,12 @@ def solution(m):
     
     r=[m[i][qSize:] for i in range(qSize)]
     fr = matmult(f,r)
-    print(fr)
-    
-    import numpy as np # I want to check my solution with numpy
 
-    mx = np.matrix(f)
-    my = np.matrix(r)   
-    print(mx*my)
+    for v in range(3):
+        fr[0][v]*=21
+        
+
+    print(fr)
 
     
 print(solution([[0, 2, 1, 0, 0], [0, 0, 0, 3, 4], [0, 0, 0, 0, 0], [0, 0, 0, 0,0], [0, 0, 0, 0, 0]]))
