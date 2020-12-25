@@ -25,15 +25,13 @@ def solution(m):
             m[r][r]=1
             qSize-=1
     
+    from fractions import Fraction
     for r in range(size):
         a = 0
         for v in range(size):
             a+=m[r][v]
         for v in range(size):
-            m[r][v] /= a
-
-    print(m)
-            
+            m[r][v] = Fraction(m[r][v],a)            
 
     q=[m[i][:qSize] for i in range(qSize)]
     iq=matrixSubtract(identity(qSize),q)
@@ -61,15 +59,21 @@ def solution(m):
     r=[m[i][qSize:] for i in range(qSize)]
     fr = matmult(f,r)
 
-    for v in range(3):
-        fr[0][v]*=21
+    from math import gcd
+    lcm = fr[0][0].denominator
+    for v in fr[0]:
+        lcm *= v.denominator // gcd(lcm, v.denominator)
+
+    return [int(fr[0][i] * lcm) for i in range(len(fr[0]))] + [lcm]
+    
         
 
-    print(fr)
+    print(fr[0])
+    print(out)
 
     
 print(solution([[0, 2, 1, 0, 0], [0, 0, 0, 3, 4], [0, 0, 0, 0, 0], [0, 0, 0, 0,0], [0, 0, 0, 0, 0]]))
-
+print(solution([[0, 1, 0, 0, 0, 1], [4, 0, 0, 3, 2, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]))
 [0, 2, 1, 0, 0], 
 [0, 0, 0, 3, 4], 
 [0, 0, 1, 0, 0], 
