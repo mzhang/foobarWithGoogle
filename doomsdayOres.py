@@ -1,3 +1,9 @@
+from fractions import Fraction
+def gcd(a,b):
+    if(b==0): 
+        return a 
+    else: 
+        return gcd(b,a%b) 
 def matrixSubtract(p,q):
     result = p
     size = len(p)
@@ -19,13 +25,22 @@ def matmult(a,b):
 
 def solution(m):
     size = len(m)
+    if size < 2:
+        return [1,1]
     qSize = size
+
+    for r in range(size):
+        if all([v==0 for v in m[r]]):
+            m[r],m[-1] = m[-1],m[r]
+            for c in range(size):
+                m[c][r],m[c][-1]=m[c][-1],m[c][r]
+            
+    print(m)
     for r in range(size):
         if all([v==0 for v in m[r]]):
             m[r][r]=1
             qSize-=1
     
-    from fractions import Fraction
     for r in range(size):
         a = 0
         for v in range(size):
@@ -35,9 +50,7 @@ def solution(m):
 
     q=[m[i][:qSize] for i in range(qSize)]
     iq=matrixSubtract(identity(qSize),q)
-    
     f=identity(qSize)
-
     for i in range(qSize):
         max = iq[i][i]
         maxRow = i
@@ -59,23 +72,22 @@ def solution(m):
     r=[m[i][qSize:] for i in range(qSize)]
     fr = matmult(f,r)
 
-    from math import gcd
     lcm = fr[0][0].denominator
+
+    print(iq)
+    print(fr)    
+
+
     for v in fr[0]:
-        lcm *= v.denominator // gcd(lcm, v.denominator)
+        lcm *= v.denominator / gcd(lcm, v.denominator)
 
-    return [int(fr[0][i] * lcm) for i in range(len(fr[0]))] + [lcm]
-    
-        
+    return [int(fr[0][i] * lcm) for i in range(len(fr[0]))] + [int(lcm)]
 
-    print(fr[0])
-    print(out)
-
-    
-print(solution([[0, 2, 1, 0, 0], [0, 0, 0, 3, 4], [0, 0, 0, 0, 0], [0, 0, 0, 0,0], [0, 0, 0, 0, 0]]))
-print(solution([[0, 1, 0, 0, 0, 1], [4, 0, 0, 3, 2, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]))
-[0, 2, 1, 0, 0], 
-[0, 0, 0, 3, 4], 
-[0, 0, 1, 0, 0], 
-[0, 0, 0, 1, 0], 
-[0, 0, 0, 0, 1]
+# print(solution([[0, 2, 1, 0, 0], [0, 0, 0, 3, 4], [0, 0, 0, 0, 0], [0, 0, 0, 0,0], [0, 0, 0, 0, 0]]))
+# print(solution([[0, 1, 0, 0, 0, 1], [4, 0, 0, 3, 2, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]))
+print(solution([
+            [1, 1, 0, 1],
+            [1, 1, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+        ]))
