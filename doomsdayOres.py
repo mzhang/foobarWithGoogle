@@ -18,14 +18,26 @@ def identity(qSize):
         i[j][j]=1
     return i
 
-def matmult(a,b):
-    zip_b = list(zip(*b))
-    return [[sum(ele_a*ele_b for ele_a, ele_b in zip(row_a, col_b)) 
-             for col_b in zip_b] for row_a in a]
+def matmult(m1,m2):
+    r=[]
+    m=[]
+    for i in range(len(m1)):
+        for j in range(len(m2[0])):
+            sums=0
+            for k in range(len(m2)):
+                sums=sums+(m1[i][k]*m2[k][j])
+            r.append(sums)
+        m.append(r)
+        r=[]
+    return m
 
 def solution(m):
     size = len(m)
-    if size < 2:
+    terminalStates=0
+    for r in m:
+        if sum(r) == 0:
+            terminalStates += 1
+    if terminalStates==1:
         return [1,1]
     qSize = size
 
@@ -86,7 +98,7 @@ def solution(m):
 
     return [int(fr[0][i] * lcm) for i in range(1,len(fr[0]))]+[int(fr[0][0] * lcm)] + [int(lcm)]
 
-print(solution([0]))
+print(solution([[0]]))
 print(solution([[0, 2, 1, 0, 0], [0, 0, 0, 3, 4], [0, 0, 0, 0, 0], [0, 0, 0, 0,0], [0, 0, 0, 0, 0]]))
 print(solution([[0, 1, 0, 0, 0, 1], [4, 0, 0, 3, 2, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]))
 print(solution([
@@ -95,6 +107,12 @@ print(solution([
             [1, 1, 1, 1],
             [1, 1, 1, 1]
         ]))
+print(solution([
+            [0, 0, 0, 0],
+            [1, 1, 1, 1],
+            [1, 1, 1, 1],
+            [1, 1, 1, 1]
+            ]))
 print(solution([
             [0, 0],
             [1, 0]
